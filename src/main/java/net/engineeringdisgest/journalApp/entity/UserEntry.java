@@ -15,7 +15,7 @@ import java.util.List;
 
 @Document(collection = "users")
 @Data
-@Builder
+@Builder // it creates a private constructor
 public class UserEntry {
     @Id
     private ObjectId id;
