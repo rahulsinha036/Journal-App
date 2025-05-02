@@ -1,6 +1,7 @@
 package net.engineeringdisgest.journalApp.entity;
 
 import lombok.*;
+import net.engineeringdisgest.journalApp.enums.Sentiment;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,6 +24,7 @@ public class JournalEntry {
     private String title;
     private String content;
     private LocalDateTime date;
+    private Sentiment sentiment;
 
 
     // No getter setter is required after lombok dependency
