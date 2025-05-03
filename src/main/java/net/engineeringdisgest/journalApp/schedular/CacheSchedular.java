@@ -6,11 +6,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 public class CacheSchedular {
 
-    @Autowired
-    private AppCache appCache;
-
-    @Scheduled(cron = "0 0/10 * ? * *") // every 10 mins it will reload the appCache, we have cron to do this
-    public void clearAppCache() {
-        appCache.init();
-    }
+//    @Autowired
+//    private AppCache appCache;
+//
+//    @Scheduled(cron = "0 0/10 * ? * *") // every 10 mins it will reload the appCache, we have cron to do this
+//    public void clearAppCache() {
+//        appCache.init();
+//    }
 }

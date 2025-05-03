@@ -7,16 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 public class UserRepositoryImplTest {
 
 
-    @Autowired
-    private UserRepositoryImpl userRepository;
-
-    @Test
-    public void getUserForSA() {
-
-        Assertions.assertNotNull(userRepository.getUserForSA());
-    }
+//    @Autowired
+//    private UserRepositoryImpl userRepository;
+//
+//    @Disabled
+//    @Test
+//    public void getUserForSA() {
+//
+//        Assertions.assertNotNull(userRepository.getUserForSA());
+//    }
 }

@@ -36,9 +36,9 @@ public class AdminController {
 
     // it will reload the init method when we have updated the something in mongodb while running
     // we just have to all it and again debug
-//    @GetMapping("/clear-cache")
-//    public void clearcahe() {
-//        appCache.init();;
-//    }
+    @GetMapping("/clear-cache")
+    public void clearcahe() {
+        appCache.init();
+    }
     // Instead of manually clearing the cache we have used cron and schedulling to reload the appCache
 }

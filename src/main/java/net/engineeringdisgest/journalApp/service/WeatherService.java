@@ -27,12 +27,25 @@ public class WeatherService {
     @Autowired
     private AppCache appCache;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeather(String city) {
 //        String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace("<city>", city).replace("<apikey>", apiKeyWeather);
-        String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace(Placeholders.CITY, city).replace(Placeholders.API_KEY, apiKeyWeather);
-        ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);// Deserialize the JSON to POJO format
-        // Here we can also add try catch block and Http status code to check the whether response created or not
-        WeatherResponse body = response.getBody();
-        return body;
+        WeatherResponse weatherResponse = redisService.get("weather_of_" + city, WeatherResponse.class);
+        if (weatherResponse != null) {
+            return weatherResponse;
+        } else {
+//            String finalAPI = API.replace("API_KEY", apiKeyWeather).replace("CITY", city);
+            String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace(Placeholders.API_KEY, apiKeyWeather).replace(Placeholders.CITY, city);
+            int c = 0;
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.POST, null, WeatherResponse.class);// Deserialize the JSON to POJO format
+            // Here we can also add try catch block and Http status code to check the response created or not
+            WeatherResponse body = response.getBody();
+            if (body != null) {
+                redisService.set("weather_of_" + city, body, 6000L);
+            }
+            return body;
+        }
     }
 }

@@ -3,6 +3,7 @@ package net.engineeringdisgest.journalApp.cache;
 import jakarta.annotation.PostConstruct;
 import net.engineeringdisgest.journalApp.entity.ConfigJournalAppEntity;
 import net.engineeringdisgest.journalApp.repository.ConfigJournalAppRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class AppCache {
         WEATHER_API;
     }
 
+    @Autowired
     private ConfigJournalAppRepository configJournalAppRepository;
 
     public Map<String, String> appCache; // it will work as in-memory cache
