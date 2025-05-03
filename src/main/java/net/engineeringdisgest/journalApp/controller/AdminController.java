@@ -20,6 +20,11 @@ public class AdminController {
     @Autowired
     private AppCache appCache;
 
+    @GetMapping("/health-check")
+    public String getHealthCheck() {
+        return "OK";
+    }
+
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers() {
         List<UserEntry> allUsersList = userService.getAll();
