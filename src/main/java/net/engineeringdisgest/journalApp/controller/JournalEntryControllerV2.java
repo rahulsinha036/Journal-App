@@ -1,5 +1,8 @@
 package net.engineeringdisgest.journalApp.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import net.engineeringdisgest.journalApp.dto.JournalEntryDTO;
 import net.engineeringdisgest.journalApp.entity.JournalEntry;
 import net.engineeringdisgest.journalApp.entity.UserEntry;
 import net.engineeringdisgest.journalApp.service.JournalEntryService;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")
+@Tag(name = "Journal APIs", description = "Read, Update, Delete")
 public class JournalEntryControllerV2 {
 
 
@@ -40,6 +44,7 @@ public class JournalEntryControllerV2 {
 
     // Using Auth --> spring security
     @GetMapping
+    @Operation(summary = "Get all journals entries of a user")
     public ResponseEntity<?> getALlJournalEntriesOfUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -53,17 +58,32 @@ public class JournalEntryControllerV2 {
 
 
 
+//    @PostMapping
+//    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry) {
+//        try {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String userName = authentication.getName();
+//            journalEntryService.savedEntry(myEntry, userName);
+//            return new ResponseEntity<>(myEntry, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @PostMapping
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry) {
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntryDTO journalEntry) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
+            JournalEntry myEntry = new JournalEntry();
+            myEntry.setTitle(journalEntry.getTitle());
+            myEntry.setContent(journalEntry.getContent());
+            myEntry.setSentiment(journalEntry.getSentiment());
             journalEntryService.savedEntry(myEntry, userName);
             return new ResponseEntity<>(myEntry, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
 //    @GetMapping("/id/{myid}")
@@ -81,13 +101,14 @@ public class JournalEntryControllerV2 {
 
     // Using auth --> spring security
     @GetMapping("/id/{myid}")
-    public ResponseEntity<?> getJournalEntryId(@PathVariable ObjectId myid) {
+    public ResponseEntity<?> getJournalEntryId(@PathVariable String myid) {
+        ObjectId objectId = new ObjectId(myid);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         UserEntry user = userService.findByUserName(userName);
         List<JournalEntry> collect = user.getJournalEntry().stream().filter(x -> x.getId().equals(myid)).collect(Collectors.toList());
         if (!collect.isEmpty()) {
-            Optional<JournalEntry> journalEntry = journalEntryService.getByID(myid);
+            Optional<JournalEntry> journalEntry = journalEntryService.getByID(objectId);
             if (journalEntry.isPresent()) {
                 return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
             }
